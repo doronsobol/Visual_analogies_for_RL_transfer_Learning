@@ -11,12 +11,18 @@ To Download the data used to create the Mappers:
 
 ## Training the Mapper
 To train the mapper:
-1. cd src
-2. run: python cocogan_train.py --config ../exps/unit/<conf>.yaml --log ../logs/<log_name>
+```
+cd src
+python cocogan_train.py --config ../exps/unit/<conf>.yaml --log ../logs/<log_name>
+```
 
 ## Gaining the Base Network for the Distilation Method
 To pre-train the distialation network:
-1. cd rl_a3c_pytorch
-2. To create the data:
-..* python ./disco_gym_eval.py --model_env <source enviroment> --env <target enviroment> --use_convertor True --convertor 1  --a2b 1 --config <config file of the conversion> --weight <mapper file>  --load-model-dir <directory of the source model>  --transform-action   --keep-images True --num-episodes 100  --labels-file <path to create the labewl file>  --images-dir <directory to save the data>  --blurr (--cuda)
-3. 
+```
+cd rl_a3c_pytorch
+```
+Create the data:
+```
+ python ./disco_gym_eval.py --model_env <source enviroment> --env <target enviroment> --use_convertor True --convertor 1  --a2b 1 --config <config file of the conversion> --weight <mapper file>  --load-model-dir <directory of the source model>  --transform-action   --keep-images True --num-episodes 100  --labels-file <path to create the labewl file>  --images-dir <directory to save the data>  --blurr (--cuda)
+```
+
