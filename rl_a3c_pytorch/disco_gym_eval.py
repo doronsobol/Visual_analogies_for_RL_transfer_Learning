@@ -3,6 +3,8 @@ import time
 import os
 import sys
 sys.path.append('../src')
+sys.path.append('../src/trainers')
+sys.path.append('../src/tools')
 #from cyclegan_based_options.test_options import TestOptions
 
 from torch.multiprocessing import Process, Lock

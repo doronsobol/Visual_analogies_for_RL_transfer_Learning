@@ -4,6 +4,19 @@
 The UNIT GAN code is heavily based on the code of the [oficial imlpementation](https://github.com/mingyuliutw/UNIT)
 And the RL code is heavily based on the code of [rl_a3c_pytorch](https://github.com/dgriff777/rl_a3c_pytorch)
 
+## Requierments:
+1. Install the following apps:
+```
+sudo apt-get install go, swig, libjpeg-turbo8-dev
+```
+2. Install python 3.5.
+3. Use pip:
+```
+pip install -r requierments.txt
+```
+4. Install pytorch [for detailed explanation](http://pytorch.org/).
+5. ```pip install setproctitle```
+
 ## Datasets
 To Download the data used to create the Mappers:
 1. Download the zip files from [here](https://drive.google.com/drive/folders/1B4_n0X0s5ZV3yOhHX2tjJN1G2hX2WpEy?usp=sharing)

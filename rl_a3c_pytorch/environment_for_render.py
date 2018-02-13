@@ -39,26 +39,25 @@ state_to_save = np.zeros((80,80,3))
 
 def  init_render():
   pass
-  #global canvas, data, state_to_save, theimage, tkinter, Tkinter,master
-import tkinter
-import Tkinter
+  #global canvas, data, state_to_save, theimage, tk, tk,master
+import tkinter as tk
 canvas_width = 256*2
 canvas_height = 256
-master = tkinter.Tk()
+master = tk.Tk()
 #canvas = Canvas(master, width=canvas_width,height=canvas_height)
-frame = tkinter.Frame(master, width=256*2, height=256)
+frame = tk.Frame(master, width=256*2, height=256)
 frame.pack()
-canvas = tkinter.Canvas(frame, width=256*2,height=256)
+canvas = tk.Canvas(frame, width=256*2,height=256)
 canvas.place(x=-2,y=-2)
 data=np.array(np.random.random((256,256*2))*100,dtype=int)
 theimage = Image.frombytes('L', (data.shape[1],data.shape[0]), data.astype('b').tostring())
 """
 orig_anvas_width = 256
 orig_anvas_height = 256
-orig_aster = tkinter.Tk()
-orig_rame = tkinter.Frame(orig_aster, width=256, height=256)
+orig_aster = tk.Tk()
+orig_rame = tk.Frame(orig_aster, width=256, height=256)
 orig_rame.pack()
-orig_anvas = tkinter.Canvas(orig_rame, width=256,height=256)
+orig_anvas = tk.Canvas(orig_rame, width=256,height=256)
 orig_anvas.place(x=-2,y=-2)
 orig_ata=np.array(np.random.random((256,256))*100,dtype=int)
 orig_heimage = Image.frombytes('L', (orig_ata.shape[1],orig_ata.shape[0]), orig_ata.astype('b').tostring())
@@ -129,7 +128,7 @@ def _orig_process_frame(frame, conf, convertor, transform, obj, args):
         #st()
         im=Image.frombytes('L', (256*2,256), data.astype('b').tostring())
         photo = ImageTk.PhotoImage(image=im)
-        canvas.create_image(0,0,image=photo,anchor=Tkinter.NW)
+        canvas.create_image(0,0,image=photo,anchor=tk.NW)
         master.update()
         data=np.roll(data,-1,1)
     frame = cv2.cvtColor(frame,cv2.COLOR_GRAY2RGB)
@@ -333,7 +332,7 @@ def _atten_process_frame(frame, conf, trainer, obj, config, opts):
         #st()
         im=Image.frombytes('L', (256*2,256), data.astype('b').tostring())
         photo = ImageTk.PhotoImage(image=im)
-        canvas.create_image(0,0,image=photo,anchor=Tkinter.NW)
+        canvas.create_image(0,0,image=photo,anchor=tk.NW)
         master.update()
         data=np.roll(data,-1,1)
 
