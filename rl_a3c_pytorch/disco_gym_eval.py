@@ -50,7 +50,7 @@ parser.add_argument(
     '--use_convertor',
     default=False,
     metavar='ENV',
-    help='environment to train on (default: Pong-v0)')
+    help='If should use the mapper')
 parser.add_argument(
     '--env',
     default='Pong-v0',
@@ -80,11 +80,11 @@ parser.add_argument(
 parser.add_argument(
     '--save-blurr-and-converted',
     action='store_true',
-    help='Watch game as it being played')
+    help='save some of the images')
 parser.add_argument(
     '--transform-action',
     action='store_true',
-    help='Watch game as it being played')
+    help='Use static transformation for the actions')
 parser.add_argument(
     '--keep-images',
     action='store_true',
@@ -93,11 +93,11 @@ parser.add_argument(
     '--prob-action',
     default=False,
     metavar='R',
-    help='Watch game as it being played')
+    help='Play with probabiliy instead of maximum action')
 parser.add_argument(
     '--use-embeddings',
     action='store_true',
-    help='Watch game as it being played')
+    help='Use embeddings of the image instead of the actual image (Experimental)')
 parser.add_argument(
     '--render',
     action='store_true',
@@ -113,13 +113,13 @@ parser.add_argument(
     type=int,
     default=4,
     metavar='CON',
-    help='If should use convertor')
+    help='Skip rate for the images (when using an enviroment with no skip)')
 parser.add_argument(
     '--convertor',
     type=int,
     default=1,
     metavar='CON',
-    help='If should use convertor')
+    help='If should use the mapper (1 if should)')
 parser.add_argument(
     '--max-episode-length',
     type=int,
@@ -130,32 +130,32 @@ parser.add_argument(
     '--labels-file', 
     default='/tmpt/t.txt', 
     metavar='LG', 
-    help='The batch size')
+    help='Location of the labels file to save')
 parser.add_argument(
     '--images-dir', 
-    default='assault_images', 
+    default='assault_images',
     metavar='LG', 
-    help='The batch size')
+    help='directory of the images to save (should be a relative address)')
 parser.add_argument(
     '--blurr', 
     action='store_true', 
-    help='The batch size')
+    help='If to use blurness (SHould Be true)')
 parser.add_argument(
     '--cuda', 
     action='store_true', 
-    help='The batch size')
+    help='If to use cuda')
 parser.add_argument(
     '--experiment-name', 
     default='name', 
-    help='The batch size')
+    help='The name of the experiment')
 parser.add_argument(
     '--deterministic',
     action='store_true',
-    help='Watch game as it being played')
+    help='If to use the the enviroment with deterministic actions')
 parser.add_argument(
     '--use-orig-model',
     action='store_true',
-    help='Watch game as it being played')
+    help='Use the model of the source model instead of that of the target model.')
 args = parser.parse_args()
 
 

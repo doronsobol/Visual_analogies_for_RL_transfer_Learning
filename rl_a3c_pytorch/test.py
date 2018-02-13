@@ -44,12 +44,9 @@ def test(rank ,args, shared_model, env_conf, counter, convertor, convertor_confi
         hyperparameters = {}
         for key in convertor_config.hyperparameters:
             hyperparameters[str(key)] = convertor_config.hyperparameters[str(key)]
-            #exec ('hyperparameters[\'%s\'] = convertor_config.hyperparameters[\'%s\']' % (key,key))
 
         trainer = getattr(trainers, hyperparameters['trainer'])(hyperparameters)
 
-        #trainer = []
-        #print("trainer=%s(hyperparameters)" % hyperparameters['trainer'])
         pretrained_gen = torch.load(
             '{0}'.format(args.weights), map_location=lambda storage, loc: storage)
         trainer.gen.load_state_dict(pretrained_gen)
@@ -74,7 +71,7 @@ def test(rank ,args, shared_model, env_conf, counter, convertor, convertor_confi
         env = atari_env("{}".format(args.env), env_conf, None, None, convertor_config, args, test=True, save_images=save_images)
         num_of_actions = env.action_space.n
         env_id = args.env
-    #env = atari_env(args.env, env_conf, args)
+
     reward_sum = 0
     start_time = time.time()
     num_tests = 0
@@ -90,7 +87,6 @@ def test(rank ,args, shared_model, env_conf, counter, convertor, convertor_confi
         player.model = A3Clstm(
             player.env.observation_space.shape[1], num_of_actions)
 
-    #player.state = player.env.reset()
     tmp_state = player.env.reset()
     if 'Tennis' in env_id:
         player.env.reset()
@@ -186,9 +182,8 @@ def test(rank ,args, shared_model, env_conf, counter, convertor, convertor_confi
                 player.env.reset()
                 player.env.unwrapped.restore_state(np.load('Tennis.npy'))
             state = tmp_state[1,:,:,:]
-            #state = player.env.reset()
             player.eps_len += 2
-            #time.sleep(10)
+
             player.state = torch.from_numpy(state).float()
             if gpu_id >= 0:
                 with torch.cuda.device(gpu_id):

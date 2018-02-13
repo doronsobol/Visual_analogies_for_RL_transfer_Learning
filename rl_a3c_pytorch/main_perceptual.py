@@ -12,12 +12,12 @@ parser = argparse.ArgumentParser(description='A3C')
 parser.add_argument('--a2b',type=int,help="1 for a2b and others for b2a",default=1)
 parser.add_argument('--config',type=str,help="net configuration")
 parser.add_argument('--weights',type=str,help="file location to the trained generator network weights")
-parser.add_argument('--weights-1',type=str,help="file location to the trained generator network weights")
+parser.add_argument('--weights-1',type=str,help="file location to the secondary trained generator network weights")
 parser.add_argument(
     '--model_env',
     default='Pong-v0',
     metavar='MENV',
-    help='environment to train on (default: Pong-v0)')
+    help='environment of the source')
 #parser.add_argument(
 #    '--convertor',
 #    type=int,
@@ -27,11 +27,11 @@ parser.add_argument(
 parser.add_argument(
     '--use-embeddings',
     action='store_true',
-    help='environment to train on (default: Pong-v0)')
+    help='Use embeddings of the image instead of the actual image (Experimental)')
 parser.add_argument(
     '--use_convertor',
     action='store_true',
-    help='environment to train on (default: Pong-v0)')
+    help='If should use the mapper')
 parser.add_argument(
     '--lr',
     type=float,
@@ -49,7 +49,7 @@ parser.add_argument(
     type=float,
     default=0,
     metavar='T',
-    help='parameter for GAE (default: 1.00)')
+    help='If should use online perceptual loss')
 parser.add_argument(
     '--tau',
     type=float,
@@ -67,31 +67,31 @@ parser.add_argument(
     type=int,
     default=0,
     metavar='S',
-    help='random seed (default: 1)')
+    help='start iteration if continue training')
 parser.add_argument(
     '--num_of_processes_on_first_gpu',
     type=int,
     default=8,
     metavar='W',
-    help='how many training processes to use (default: 32)')
+    help='Not in use')
 parser.add_argument(
     '--test-workers',
     type=int,
     default=6,
     metavar='W',
-    help='how many training processes to use (default: 32)')
+    help='how many testing processes to use (default: 32)')
 parser.add_argument(
     '--pre-workers',
     type=int,
     default=32,
     metavar='W',
-    help='how many training processes to use (default: 32)')
+    help='how many training processes to use for the source (default: 32)')
 parser.add_argument(
     '--pretrain_iterations',
     type=int,
     default=0,
     metavar='W',
-    help='how many training processes to use (default: 32)')
+    help='how many training iterations to use on the source')
 parser.add_argument(
     '--workers',
     type=int,
@@ -114,7 +114,7 @@ parser.add_argument(
     '--env',
     default='Pong-v0',
     metavar='ENV',
-    help='environment to train on (default: Pong-v0)')
+    help='environment of the target domain')
 parser.add_argument(
     '--env-config',
     default='config.json',
@@ -128,11 +128,11 @@ parser.add_argument(
 parser.add_argument(
     '--deterministic', 
     action='store_true',
-    help='load a trained model')
+    help='If to use the the enviroment with deterministic actions')
 parser.add_argument(
     '--load-conv', 
     action='store_true',
-    help='load a trained model')
+    help='load a trained convolutions model')
 parser.add_argument(
     '--load', 
     action='store_true',
@@ -162,7 +162,7 @@ parser.add_argument(
     '--load-model-file',
     default='trained_models/',
     metavar='LMD',
-    help='folder to load trained models from')
+    help='file load trained models from')
 parser.add_argument(
     '--save-model-dir',
     default='trained_models/',
@@ -180,28 +180,28 @@ parser.add_argument(
 parser.add_argument(
     '--blurr',
     action='store_true',
-    help='Watch game as it being played')
+    help='if should blurr the frames')
 parser.add_argument(
     '--per-process-convertor',
     action='store_true',
-    help='Watch game as it being played')
+    help='Must be used when using the Mapper due to a bug in the memory sharing of pytorch')
 parser.add_argument(
     '--co-train',
     action='store_true',
-    help='Watch game as it being played')
+    help='Train the source with the target')
 parser.add_argument(
     '--save_images',
     action='store_true',
-    help='Watch game as it being played')
+    help='Save some of the images (for debuging purpuses)')
 parser.add_argument(
     '--cuda',
     action='store_true',
-    help='Watch game as it being played')
+    help='If should use cuda')
 parser.add_argument(
     '--experiment-name', 
     default='name', 
     metavar='LG', 
-    help='The batch size')
+    help='The name of the experiment')
 parser.add_argument(
     '--gpu-ids',
     type=int,
@@ -216,13 +216,13 @@ parser.add_argument(
 parser.add_argument(
     '--co-train-expantion',
     action='store_true',
-    help='frame skip rate (default: 4)')
+    help='Pretrain the converted source')
 parser.add_argument(
     '--co-train-steps',
     type=int,
     default=100000,
     metavar='SR',
-    help='frame skip rate (default: 4)')
+    help='Number of steps to train the model on both the source and the target')
 parser.add_argument(
     '--skip-rate',
     type=int,
@@ -397,12 +397,6 @@ if __name__ == '__main__':
     counter = Counter(0)
     counter_1 = Counter(args.iteration_start)
 
-    """
-    p = Process(target=test, args=(args, shared_model, env_conf, counter, convertor, convertor_config, counter_1))
-    p.start()
-    processes.append(p)
-    time.sleep(0.1)
-    """
     
     if args.co_train_expantion:
         p = Process(target=test, args=(0 ,args, shared_model, env_conf, counter, convertor, convertor_config, counter_1, True, model_env_conf, None))
@@ -441,8 +435,6 @@ if __name__ == '__main__':
         p.start()
         processes.append(p)
         time.sleep(10)
-    """
-    """
     if args.co_train_expantion:
         for rank in range(0, args.pre_workers):
             if not args.use_embeddings:
@@ -452,8 +444,6 @@ if __name__ == '__main__':
             p.start()
             processes.append(p)
             time.sleep(0.1)
-    """
-    """
     logger = Logger("{}/{}".format(args.log_dir, args.experiment_name))
     while True:
         log = logger_queue.get()

@@ -32,12 +32,9 @@ def train(rank, args, shared_model, optimizer, env_conf, counter, convertor, con
         hyperparameters = {}
         for key in convertor_config.hyperparameters:
             hyperparameters[str(key)] = convertor_config.hyperparameters[str(key)]
-            #exec ('hyperparameters[\'%s\'] = convertor_config.hyperparameters[\'%s\']' % (key,key))
 
         trainer = getattr(trainers, hyperparameters['trainer'])(hyperparameters)
 
-        #trainer = []
-        #print("trainer=%s(hyperparameters)" % hyperparameters['trainer'])
         pretrained_gen = torch.load(
             '{0}'.format(args.weights), map_location=lambda storage, loc: storage)
         trainer.gen.load_state_dict(pretrained_gen)
@@ -49,7 +46,7 @@ def train(rank, args, shared_model, optimizer, env_conf, counter, convertor, con
         distance_gan = None
 
     save_images = (rank == 0 or rank == args.workers) and args.save_images
-    #save_images = False
+
     if args.co_train_expantion and args.per_process_convertor:
         env = atari_env("{}".format(args.model_env), model_env_conf, convertor, None, convertor_config, args, save_images=save_images)
         env_id = args.model_env
@@ -289,6 +286,4 @@ def train(rank, args, shared_model, optimizer, env_conf, counter, convertor, con
 
             teacher_optimizer.step()
         player.clear_actions()
-        #if not do_transform:
-            #print("##########################################")
 
