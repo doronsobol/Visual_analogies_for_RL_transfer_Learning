@@ -28,6 +28,9 @@ To train the mapper:
 cd src
 python cocogan_train.py --config ../exps/unit/<conf>.yaml --log ../logs/<log_name>
 ```
+### Images
+Source Image Pong                                                               Destination image Breakout
+![Source Image Pong](./images/pong_to_breakout_half-0.jpg "Source Image Pong") ![Destination Image Breakout](./images/pong_to_breakout_half-0.jpg "Source Image Breakout")
 
 ## Gaining the Base Network for the Distilation Method
 To pre-train the distialation network:
