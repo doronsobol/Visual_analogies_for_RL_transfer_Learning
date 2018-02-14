@@ -51,17 +51,7 @@ canvas = tk.Canvas(frame, width=256*2,height=256)
 canvas.place(x=-2,y=-2)
 data=np.array(np.random.random((256,256*2))*100,dtype=int)
 theimage = Image.frombytes('L', (data.shape[1],data.shape[0]), data.astype('b').tostring())
-"""
-orig_anvas_width = 256
-orig_anvas_height = 256
-orig_aster = tk.Tk()
-orig_rame = tk.Frame(orig_aster, width=256, height=256)
-orig_rame.pack()
-orig_anvas = tk.Canvas(orig_rame, width=256,height=256)
-orig_anvas.place(x=-2,y=-2)
-orig_ata=np.array(np.random.random((256,256))*100,dtype=int)
-orig_heimage = Image.frombytes('L', (orig_ata.shape[1],orig_ata.shape[0]), orig_ata.astype('b').tostring())
-"""
+
 def dist_exp(im):
     e_im = np.exp(-im/6.)
     e_im = 1.0-e_im
