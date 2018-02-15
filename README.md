@@ -29,9 +29,16 @@ cd src
 python cocogan_train.py --config ../exps/unit/<conf>.yaml --log ../logs/<log_name>
 ```
 ### Mapper Images
-Source Image Pong | Destination image Breakout
+Source | Target
 :--------|-----------:
-![Source Image Pong](./images/pong_to_breakout_half-0.jpg "Source Image Pong") | ![Destination Image Breakout](./images/pong_to_breakout_half-1.jpg "Source Image Breakout")
+![Source Image Pong](./images/pong_to_breakout_half-0.jpg "Source Image Pong") | ![Destination Image Breakout](./images/pong_to_breakout_half-1.jpg "Target Image Breakout")
+![Source Image Breakout](./images/breakout_to_pong_half-0.jpg "Source Image Breakout") | ![Destination Image Pong](./images/breakout_to_pong_half-1.jpg "Target Image Pong")
+![Source Image Pong](./images/pong_to_tennis_half-0.jpg "Source Image Pong") | ![Destination Image Tennis](./images/pong_to_tennis_half-1.jpg "Target Image Tennis")
+![Source Image Tennis](./images/tennis_to_pong_half-0.jpg "Source Image Tennis") | ![Destination Image Pong](./images/tennis_to_pong_half-1.jpg "Target Image Pong")
+![Source Image Breakout](./images/breakout_to_tennis_half-0.jpg "Source Image Breakout") | ![Destination Tennis](./images/breakout_to_tennis_half-1.jpg "Target Image Tennis")
+![Source Image Tennis](./images/tennis_to_breakout_half-0.jpg "Source Image Tennis") | ![Destination Image Breakout](./images/tennis_to_breakout_half-1.jpg "Target Image Breakout")
+![Source Image Assault](./images/assault_to_demon_half-0.jpg "Source Image Assault") | ![Destination Demon-attack](./images/assault_to_demon_half-1.jpg "Target Image Demon-Attack")
+![Source Image Demon-Attack](./images/Demon_to_Assault_half-0.jpg "Source Image Demon-Attack") | ![Destination Image Assault](./images/Demon_to_Assault_half-1.jpg "Target Image Assault")
 
 ## Gaining the Base Network for the Distilation Method
 To pre-train the distialation network:
