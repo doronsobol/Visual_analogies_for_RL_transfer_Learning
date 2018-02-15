@@ -1,4 +1,5 @@
 from __future__ import division
+import sys
 import gym
 import numpy as np
 from collections import deque
@@ -15,6 +16,7 @@ from skimage.color import rgb2gray
 import torchvision.transforms as transforms
 import torchvision
 from tools import *
+import pdb
 from torch.autograd import Variable
 
 tennis_median_im = cv2.imread('median.jpg', 0)
@@ -103,6 +105,8 @@ def atari_env(env_id, env_conf, convertor=None, flann=None, config=None, opts=No
     if 'FIRE' in env.unwrapped.get_action_meanings():
         env = FireResetEnv(env)
     #env = AtariRescale(env, env_conf)
+    if args.convert_reward and 'Pong' in env_id:
+        env = BreakoutReward(env)
     transform = transforms.Compose(transformations)
     env = AtariRescale(env, env_conf, convertor, transform, flann, config, opts, save_images, env_id)
     if not args.use_embeddings:
@@ -120,6 +124,19 @@ def _process_frame(frame, conf):
     frame = np.reshape(frame, [1, 80, 80])
     return frame
 """
+class ForkedPdb(pdb.Pdb):
+    """A Pdb subclass that may be used
+    from a forked multiprocessing child
+
+    """
+    def interaction(self, *args, **kwargs):
+        _stdin = sys.stdin
+        try:
+            sys.stdin = open('/dev/stdin')
+            pdb.Pdb.interaction(self, *args, **kwargs)
+        finally:
+            sys.stdin = _stdin
+
 def _atten_process_frame(frame, conf, trainer, obj, config, opts, save_images, env_id):
     global p_frame, pp_frame, im_num, state_to_save  
     global theimage, data, orig_ata, orig_heimage, canvas
@@ -377,6 +394,44 @@ class NoopResetEnv(gym.Wrapper):
             obs, _, done, _ = self.env.step(self.noop_action)
         return obs
 
+
+class BreakoutReward(gym.Wrapper):
+    def __init__(self, env):
+        """Take action on reset for environments that are fixed until firing."""
+        gym.Wrapper.__init__(self, env)
+        self.side = 0
+        self.threshold = 80
+
+
+    def _reset(self):
+        self.side = 0
+        return self.env.reset()
+
+    def _step(self, action):
+        obs, reward, done, info = self.env.step(action)
+        if reward != 0:
+            reward = 0
+            self.side = 0
+            return obs, reward, done, info
+
+        state = obs
+        state = state[30:,:,:]
+        state = rgb2gray(state)*255.
+        state = state.astype(np.uint8)
+
+        _, state = cv2.threshold(state,200,1,cv2.THRESH_BINARY)
+        x_cord = state.sum(axis=0).argmax()
+        if 0 == x_cord:
+            return obs, reward, done, info
+        new_side = 1 if x_cord < self.threshold else -1
+        if 1 == new_side and -1 == self.side:
+            reward = 1
+        else:
+            reward = 0
+
+        self.side = new_side
+
+        return obs, reward, done, info
 
 class FireResetEnv(gym.Wrapper):
     def __init__(self, env):

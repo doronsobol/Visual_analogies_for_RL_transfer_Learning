@@ -29,6 +29,10 @@ parser.add_argument(
     action='store_true',
     help='Use embeddings of the image instead of the actual image (Experimental)')
 parser.add_argument(
+    '--convert-reward',
+    action='store_true',
+    help='If should use the mapper')
+parser.add_argument(
     '--use_convertor',
     action='store_true',
     help='If should use the mapper')
@@ -371,6 +375,7 @@ if __name__ == '__main__':
     convertor = distance_gan
 
     env = atari_env("{}".format(args.env), env_conf, convertor, None, convertor_config, args)
+    env.reset()
     #convertor = convertor if args.convertor == 1 else None
 
     if args.shared_optimizer:
