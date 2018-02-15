@@ -29,7 +29,7 @@ cd src
 python cocogan_train.py --config ../exps/unit/<conf>.yaml --log ../logs/<log_name>
 ```
 ### Mapper Images
-:Source | Target:
+Source | Target
 :--------|-----------:
 ![Source Image Pong](./images/pong_to_breakout_half-0.jpg "Source Image Pong") | ![Destination Image Breakout](./images/pong_to_breakout_half-1.jpg "Target Image Breakout")
 ![Source Image Breakout](./images/breakout_to_pong_half-0.jpg "Source Image Breakout") | ![Destination Image Pong](./images/breakout_to_pong_half-1.jpg "Target Image Pong")
