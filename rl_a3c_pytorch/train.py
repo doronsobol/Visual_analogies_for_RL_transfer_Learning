@@ -27,6 +27,8 @@ def train(rank, args, shared_model, optimizer, env_conf, counter, convertor, con
         torch.cuda.manual_seed(args.seed + rank)
 
     print("setting train {}/{} node on gpu: {}, conversion: {}".format(rank+1, args.workers,gpu_id, args.per_process_convertor))
+    # Since pytorch has a problem with sharing GPU data we need to 
+    # create the mapper model for each sub-process
     if args.per_process_convertor:
         convertor_config = NetConfig(args.config)
         hyperparameters = {}
@@ -47,6 +49,7 @@ def train(rank, args, shared_model, optimizer, env_conf, counter, convertor, con
 
     save_images = (rank == 0 or rank == args.workers) and args.save_images
 
+    # If we need to convert the image and actions:
     if args.co_train_expantion and args.per_process_convertor:
         env = atari_env("{}".format(args.model_env), model_env_conf, convertor, None, convertor_config, args, save_images=save_images)
         env_id = args.model_env
@@ -72,17 +75,20 @@ def train(rank, args, shared_model, optimizer, env_conf, counter, convertor, con
     player = Agent(None, env, args, None)
     player.env_id = env_id
 
+    # If we want to transform the actions
     if args.co_train_expantion and args.per_process_convertor and do_transform:
         player.translate_test = True
         player.translator = get_translator_from_source(args.env, args.model_env)
 
     player.gpu_id = gpu_id
+    # Experimental: using the embedding instead of the images
     if args.use_embeddings:
         player.model = A3Clstm_embeddings(num_of_actions)
     else:
         player.model = A3Clstm(
             player.env.observation_space.shape[1], num_of_actions)
 
+    # Experimental
     if 0 != args.percp_loss:
         player.teacher_model = A3Clstm(env.observation_space.shape[1], get_num_of_actions(args))
         teacher_model_dict = player.teacher_model.state_dict()
@@ -99,6 +105,7 @@ def train(rank, args, shared_model, optimizer, env_conf, counter, convertor, con
 
 
     tmp_state = player.env.reset()
+    # If the enviroment is Tennis, reset after every small game in order to align the sides.
     if 'Tennis' in env_id:
         player.env.reset()
         player.env.unwrapped.restore_state(np.load('Tennis.npy'))
@@ -128,6 +135,7 @@ def train(rank, args, shared_model, optimizer, env_conf, counter, convertor, con
     player.eps_len += 2
     run_train = True
     while run_train:
+        # Experimental train to networks with the same enviroment
         if args.co_train:
             player.co_train_prob = counter.value()/float(args.co_train_steps)
             if player.co_train_prob > 1:
