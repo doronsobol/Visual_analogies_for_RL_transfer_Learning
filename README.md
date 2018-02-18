@@ -59,11 +59,11 @@ python pretrain_main.py --experiment_name <name of  the experiment> --epochs 300
 ```
 python main_perceptual.py --env <Target enviroment> --workers <number of threads> --save-model-dir <directory to save the model> --load-model-file <model trained to mimic the source>  --max-episode-length 10000 --load-conv --experiment-name <name> --log-dir <log directory> --cuda --gpu-ids <list of availabel gpus> --amsgrad True --workers <number of threads>
 ```
-2.
+2. Data transfer for pretraining
 ```
 python ./main_perceptual.py --model_env <source> --env <target> --use_convertor --a2b <direction> --config <conf file> --weight <mapper>  --experiment-name <name> --save-model-dir <save dir for the model> --workers <number of threads for the training>  --max-episode-length 10000 --log-dir <log directory> --deterministic --co-train-expantion  --per-process-convertor --cuda --gpu-ids <list of gpus> --blurr --pre-workers <number of threads for the pretrain phase> --pretrain_iterations <number of pretrain iterations (usualy 7M is enough)>
 ```
-3.
+3. Continuous data transfer
 ```
 python ./main_perceptual.py --model_env <source> --env <target> --use_convertor --a2b <direction> --config <conf_file> --weight <cmapper> --save-model-dir <save dir for the model>  --experiment-name <name> --workers <numbre of workers for the source training (usualy 6 times the number of workers for the target)> --test-workers <number of test workers>  --max-episode-length 10000 --log-dir <log> --deterministic --co-train-expantion  --per-process-convertor --cuda --gpu-ids <list of gpus> --blurr --pre-workers <number of target workers>
 ```
