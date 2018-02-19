@@ -5,6 +5,7 @@ logs/
 dgx/scripts/
 notebooks/.ipynb_checkpoints/*
 *.tar.gz
+log*
+*/log*
 *.zip
-*.pkl
 *.pyc
