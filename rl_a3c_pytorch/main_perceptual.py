@@ -325,24 +325,7 @@ if __name__ == '__main__':
         shared_model.load_state_dict(model_dict)
     shared_model.share_memory()
 
-    if args.co_train:
-        if args.use_convertor:
-            num_of_actions = get_num_of_actions(args)
-            state_path = '{0}{1}.dat'.format(args.load_model_dir, args.model_env)
-        else:
-            num_of_actions = env.action_space.n
-            state_path = args.load_model_file
-
-        shared_teacher_model = A3Clstm(env.observation_space.shape[1], num_of_actions)
-        teacher_model_dict = shared_teacher_model.state_dict()
-        teacher_saved_state = torch.load(state_path,
-            map_location=lambda storage, loc: storage)
-        #teacher_saved_state = {k: v for k, v in teacher_saved_state.items() if 'conv' in k}
-        teacher_model_dict.update(teacher_saved_state)
-        shared_teacher_model.load_state_dict(teacher_model_dict)
-        shared_teacher_model.share_memory()
-    else:
-        shared_teacher_model = None
+    shared_teacher_model = None
 
     if args.use_convertor and not args.per_process_convertor:
         convertor_config = NetConfig(args.config)
@@ -375,18 +358,10 @@ if __name__ == '__main__':
 
     if args.shared_optimizer:
         if args.optimizer == 'RMSprop':
-            if args.co_train:
-                teacher_optimizer = SharedRMSprop(shared_teacher_model.parameters(), lr=args.lr)
-                teacher_optimizer.share_memory()
-            else:
-                teacher_optimizer = None
+            teacher_optimizer = None
             optimizer = SharedRMSprop(shared_model.parameters(), lr=args.lr)
         if args.optimizer == 'Adam':
-            if args.co_train:
-                teacher_optimizer = SharedAdam(shared_teacher_model.parameters(), lr=args.lr, amsgrad=args.amsgrad)
-                teacher_optimizer.share_memory()
-            else:
-                teacher_optimizer = None
+            teacher_optimizer = None
             optimizer = SharedAdam(shared_model.parameters(), lr=args.lr, amsgrad=args.amsgrad)
         optimizer.share_memory()
     else:

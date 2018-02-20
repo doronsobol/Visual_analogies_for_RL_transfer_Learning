@@ -61,9 +61,9 @@ python main_perceptual.py --env <Target enviroment> --workers <number of threads
 ```
 2. Data transfer for pretraining
 ```
-python ./main_perceptual.py --model_env <source> --env <target> --use_convertor --a2b <direction> --config <conf file> --weight <mapper>  --experiment-name <name> --save-model-dir <save dir for the model> --workers <number of threads for the training>  --max-episode-length 10000 --log-dir <log directory> --deterministic --co-train-expantion  --per-process-convertor --cuda --gpu-ids <list of gpus> --blurr --pre-workers <number of threads for the pretrain phase> --pretrain_iterations <number of pretrain iterations (usualy 7M is enough)>
+python ./main_perceptual.py --model_env <source> --env <target> --use_convertor --a2b <direction> --config <conf file> --weights <mapper>  --experiment-name <name> --save-model-dir <save dir for the model> --workers <number of threads for the training>  --max-episode-length 10000 --log-dir <log directory> --deterministic --co-train-expantion  --per-process-convertor --cuda --gpu-ids <list of gpus> --blurr --pre-workers <number of threads for the pretrain phase> --pretrain_iterations <number of pretrain iterations (usualy 7M is enough)>
 ```
 3. Continuous data transfer
 ```
-python ./main_perceptual.py --model_env <source> --env <target> --use_convertor --a2b <direction> --config <conf_file> --weight <cmapper> --save-model-dir <save dir for the model>  --experiment-name <name> --workers <numbre of workers for the source training (usualy 6 times the number of workers for the target)> --test-workers <number of test workers>  --max-episode-length 10000 --log-dir <log> --deterministic --co-train-expantion  --per-process-convertor --cuda --gpu-ids <list of gpus> --blurr --pre-workers <number of target workers>
+python ./main_perceptual.py --model_env <source> --env <target> --use_convertor --a2b <direction> --config <conf_file> --weights <mapper> --save-model-dir <save dir for the model>  --experiment-name <name> --workers <numbre of workers for the source training (usualy 6 times the number of workers for the target)> --test-workers <number of test workers>  --max-episode-length 10000 --log-dir <log> --deterministic --co-train-expantion  --per-process-convertor --cuda --gpu-ids <list of gpus> --blurr --pre-workers <number of target workers>
 ```
